@@ -1,0 +1,15 @@
+[
+  {
+    "id": "1746254317609",
+    "title": "Camisa Negra",
+    "description": "Algodón premium, corte slim",
+    "code": "CAM-001",
+    "price": 29.99,
+    "status": true,
+    "stock": 15,
+    "category": "Ropa",
+    "thumbnails": [
+      "img/camisa-negra-1.jpg"
+    ]
+  }
+]
