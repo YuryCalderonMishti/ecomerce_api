@@ -11,5 +11,16 @@
     "thumbnails": [
       "img/camisa-negra-1.jpg"
     ]
+  },
+  {
+    "id": "1746282945990",
+    "title": "Vestido Azul",
+    "price": "70",
+    "description": "",
+    "code": "",
+    "status": true,
+    "stock": 1,
+    "category": "",
+    "thumbnails": []
   }
 ]
