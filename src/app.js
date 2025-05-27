@@ -20,8 +20,12 @@ const PORT = 8080;
 app.use(express.json());
 app.use(express.static(join(__dirname, 'public')));
 
-app.engine('handlebars', engine());
-app.set('views',join(__dirname, 'views'));
+app.engine('handlebars', engine({
+    layoutsDir: join(__dirname, 'views/layouts'),
+    partialsDir: join(__dirname, 'views/partials'),
+    defaultLayout: 'main'
+}));
+app.set('views', join(__dirname, 'views'));
 app.set('view engine', 'handlebars');
 
 app.use('/api/products', productsRouter);

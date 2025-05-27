@@ -49,6 +49,8 @@ export default function viewsRouter(io) {
         try {
             const result = await pmDB.getProducts(req.query);
 
+            console.log('📦 Resultado de productos paginados:', result);
+
             res.render('products', {
                 title: 'Productos',
                 products: result.payload,

@@ -1,61 +1,29 @@
-{{!-- views/products.handlebars --}}
-{{> header }}
-<h1>Lista de Productos</h1>
+{{> header title="Lista de productos"}}
 
-<div class="product-list">
-    {{#each payload}}
-        <div class="product-card">
-        <h3>{{this.title}}</h3>
-        <p>Precio: ${{this.price}}</p>
-        <p>Categoría: {{this.category}}</p>
+<h1 class="text-2xl font-bold mb-4 text-center">Lista de productos</h1>
+
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
+    {{#each products}}
+        <div class="bg-white shadow-md rounded-2xl p-4">
+        <h2 class="text-xl font-semibold">{{title}}</h2>
+        <p class="text-gray-700 mb-2">{{description}}</p>
+        <p class="text-pink-600 font-bold mb-1">$ {{price}}</p>
+        <p class="text-sm text-gray-500">Categoría: {{category}}</p>
+        <p class="text-sm text-gray-500">Stock: {{stock}}</p>
         </div>
     {{/each}}
 </div>
 
-<div class="pagination">
+<div class="flex justify-center mt-6 space-x-4">
     {{#if hasPrevPage}}
-        <a href="{{prevLink}}" class="btn">Anterior</a>
+        <a href="/products?page={{prevPage}}" class="bg-pink-500 hover:bg-pink-600 text-white px-4 py-2 rounded-lg">Anterior</a>
     {{/if}}
 
-    <span>Página {{page}} de {{totalPages}}</span>
+    <span class="px-4 py-2 text-gray-700">Página {{currentPage}}</span>
 
     {{#if hasNextPage}}
-        <a href="{{nextLink}}" class="btn">Siguiente</a>
+        <a href="/products?page={{nextPage}}" class="bg-pink-500 hover:bg-pink-600 text-white px-4 py-2 rounded-lg">Siguiente</a>
     {{/if}}
-</div>
+    </div>
 
-<style>
-    .product-list {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-        gap: 1rem;
-    }
-
-    .product-card {
-        border: 1px solid #ddd;
-        padding: 1rem;
-        border-radius: 8px;
-        background: #fafafa;
-    }
-
-    .pagination {
-        margin-top: 2rem;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 1rem;
-    }
-
-    .btn {
-        padding: 0.5rem 1rem;
-        background-color: #3498db;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        text-decoration: none;
-    }
-
-    .btn:hover {
-        background-color: #2980b9;
-    }
-</style>
+{{> footer }}
