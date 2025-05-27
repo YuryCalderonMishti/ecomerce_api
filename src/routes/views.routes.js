@@ -1,9 +1,11 @@
 import { Router } from 'express';
 import ProductManager from '../managers/ProductManager.js';
+import ProductManagerDB from '../managers/ProductManagerDB.js'
 
 export default function viewsRouter(io) {
     const router = Router();
     const pm = new ProductManager();
+    const pmDB = new ProductManagerDB();
 
     // Ruta para la vista principal 'home'
     router.get('/', async (req, res) => {
@@ -41,6 +43,25 @@ export default function viewsRouter(io) {
             io.emit('updateProducts', updated);
         });
         });
+    });
+
+    router.get('/products', async (req, res) => {
+        try {
+            const result = await pmDB.getProducts(req.query);
+
+            res.render('products', {
+                title: 'Productos',
+                products: result.payload,
+                hasPrevPage: result.hasPrevPage,
+                hasNextPage: result.hasNextPage,
+                prevPage: result.prevPage,
+                nextPage: result.nextPage,
+                currentPage: result.page
+            });
+        } catch (error) {
+            console.error(error);
+            res.status(500).send('Error al cargar productos');
+        }
     });
 
     return router;

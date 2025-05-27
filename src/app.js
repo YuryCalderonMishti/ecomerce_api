@@ -7,6 +7,7 @@ import cartsRouter from './routes/carts.routes.js';
 import viewsRouter from './routes/views.routes.js';
 import path, { join } from 'path';
 import { fileURLToPath } from 'url';
+import mongoose from 'mongoose';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -31,4 +32,16 @@ io.on('connection', socket => {
     console.log('Cliente conectado:', socket.id);
 });
 
-httpServer.listen(PORT, () => console.log(`Servidor en http://localhost:${PORT}`));
+const MONGO_URI = 'mongodb://localhost:27017/ecommerce';
+
+mongoose.connect(MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+})
+.then(() => {
+    console.log('🟢 Conectado a MongoDB');
+    httpServer.listen(PORT, () => console.log(`Servidor en http://localhost:${PORT}`));
+})
+.catch(err => {
+    console.error('🔴 Error al conectar con MongoDB:', err);
+});

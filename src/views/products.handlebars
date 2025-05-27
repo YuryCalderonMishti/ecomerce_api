@@ -1,0 +1,61 @@
+{{!-- views/products.handlebars --}}
+{{> header }}
+<h1>Lista de Productos</h1>
+
+<div class="product-list">
+    {{#each payload}}
+        <div class="product-card">
+        <h3>{{this.title}}</h3>
+        <p>Precio: ${{this.price}}</p>
+        <p>Categoría: {{this.category}}</p>
+        </div>
+    {{/each}}
+</div>
+
+<div class="pagination">
+    {{#if hasPrevPage}}
+        <a href="{{prevLink}}" class="btn">Anterior</a>
+    {{/if}}
+
+    <span>Página {{page}} de {{totalPages}}</span>
+
+    {{#if hasNextPage}}
+        <a href="{{nextLink}}" class="btn">Siguiente</a>
+    {{/if}}
+</div>
+
+<style>
+    .product-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 1rem;
+    }
+
+    .product-card {
+        border: 1px solid #ddd;
+        padding: 1rem;
+        border-radius: 8px;
+        background: #fafafa;
+    }
+
+    .pagination {
+        margin-top: 2rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .btn {
+        padding: 0.5rem 1rem;
+        background-color: #3498db;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        text-decoration: none;
+    }
+
+    .btn:hover {
+        background-color: #2980b9;
+    }
+</style>
