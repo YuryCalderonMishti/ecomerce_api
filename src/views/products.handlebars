@@ -1,15 +1,29 @@
-{{> header title="Lista de productos"}}
-
 <h1 class="text-2xl font-bold mb-4 text-center">Lista de productos</h1>
 
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
     {{#each products}}
-        <div class="bg-white shadow-md rounded-2xl p-4">
-        <h2 class="text-xl font-semibold">{{title}}</h2>
-        <p class="text-gray-700 mb-2">{{description}}</p>
-        <p class="text-pink-600 font-bold mb-1">$ {{price}}</p>
-        <p class="text-sm text-gray-500">Categoría: {{category}}</p>
-        <p class="text-sm text-gray-500">Stock: {{stock}}</p>
+        <div class="bg-white shadow-md rounded-2xl p-4 flex flex-col justify-between">
+        <div>
+            <h2 class="text-xl font-semibold">{{title}}</h2>
+            <p class="text-gray-700 mb-2">{{description}}</p>
+            <p class="text-pink-600 font-bold mb-1">$ {{price}}</p>
+            <p class="text-sm text-gray-500">Categoría: {{category}}</p>
+            <p class="text-sm text-gray-500">Stock: {{stock}}</p>
+        </div>
+
+        <div class="mt-4 space-y-2">
+            <!-- Botón de ver detalles -->
+            <a href="/products/{{_id}}" class="block text-center bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-lg">
+            Ver detalles
+            </a>
+
+            <!-- Botón de agregar al carrito -->
+            <form action="/api/carts/685b8a014201c953ef62bccb/product/{{_id}}" method="POST">
+            <button type="submit" class="w-full bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-lg">
+                Agregar al carrito
+            </button>
+            </form>
+        </div>
         </div>
     {{/each}}
 </div>
@@ -24,6 +38,4 @@
     {{#if hasNextPage}}
         <a href="/products?page={{nextPage}}" class="bg-pink-500 hover:bg-pink-600 text-white px-4 py-2 rounded-lg">Siguiente</a>
     {{/if}}
-    </div>
-
-{{> footer }}
+</div>

@@ -15,7 +15,7 @@ export default class ProductManagerDB {
         }
 
         const sortOptions = sort === 'asc' ? { price: 1 } :
-                            sort === 'desc' ? { price: -1 } : {};
+                            sort === 'desc' ? { price: -1 } : {_id:1};
 
         const options = {
             page: parseInt(page),

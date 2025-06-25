@@ -45,7 +45,7 @@ export default class CartManagerDB {
             throw new Error('ID de carrito inválido');
         }
 
-        // Validar que products sea un array con la estructura correcta
+        
         if (!Array.isArray(products)) {
             throw new Error('Productos debe ser un arreglo');
         }
@@ -58,7 +58,7 @@ export default class CartManagerDB {
             ) {
                 throw new Error('Estructura de producto inválida');
             }
-            // Validar que el producto exista en la base de datos
+            
             const productExists = await Product.findById(item.product);
             if (!productExists) {
                 throw new Error(`Producto con id ${item.product} no existe`);

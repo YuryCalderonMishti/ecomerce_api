@@ -1,11 +1,13 @@
 import { Router } from 'express';
 import ProductManager from '../managers/ProductManager.js';
-import ProductManagerDB from '../managers/ProductManagerDB.js'
+import ProductManagerDB from '../managers/ProductManagerDB.js';
+import CartManagerDB from '../managers/CartManagerDB.js';
 
 export default function viewsRouter(io) {
     const router = Router();
     const pm = new ProductManager();
     const pmDB = new ProductManagerDB();
+    const cartManager = new CartManagerDB();
 
     // Ruta para la vista principal 'home'
     router.get('/', async (req, res) => {
@@ -64,6 +66,20 @@ export default function viewsRouter(io) {
             console.error(error);
             res.status(500).send('Error al cargar productos');
         }
+    });
+
+    router.get('/products/:pid', async (req, res) => {
+        const product = await pmDB.getProductById(req.params.pid);
+        if (!product) return res.status(404).send('Producto no encontrado');
+        res.render('productDetail', { product });
+    });
+
+    router.get('/carts/:cid', async (req, res) => {
+        const cart = await cartManager.getCartById(req.params.cid);
+        res.render('cart', {
+            products: cart.products,
+            title: 'Carrito'
+        });
     });
 
     return router;
