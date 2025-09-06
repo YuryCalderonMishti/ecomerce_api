@@ -8,6 +8,10 @@ import viewsRouter from './routes/views.routes.js';
 import path, { join } from 'path';
 import { fileURLToPath } from 'url';
 import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+import usersRouter from "./routes/users.routes.js";
+
+dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -15,7 +19,8 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const httpServer = createServer(app);
 const io = new IOServer(httpServer);
-const PORT = 8080;
+
+const PORT = process.env.PORT || 8080;
 
 app.use(express.json());
 app.use(express.static(join(__dirname, 'public')));
@@ -38,15 +43,14 @@ app.set('view engine', 'handlebars');
 app.use('/api/products', productsRouter);
 app.use('/api/carts', cartsRouter);
 app.use('/', viewsRouter(io));
+app.use("/api/users", usersRouter);
 
 io.on('connection', socket => {
     console.log('Cliente conectado:', socket.id);
 });
 
-const MONGO_URI = 'mongodb+srv://yurycami13:TsZ8yKzv0BK1w0Am@cluster0.cxltsku.mongodb.net/ecommerce?retryWrites=true&w=majority&appName=Cluster0';
 
-
-mongoose.connect(MONGO_URI,)
+mongoose.connect(process.env.MONGO_URI)
 .then(() => {
     console.log('🟢 Conectado a MongoDB');
     httpServer.listen(PORT, () => console.log(`Servidor en http://localhost:${PORT}`));
