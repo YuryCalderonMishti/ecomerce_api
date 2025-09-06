@@ -1,33 +1,69 @@
 import { Router } from "express";
+import UserModel from "../models/User.js"; 
 import { createHash, isValidPassword } from "../utils/bcrypt.js";
 
 const router = Router();
 
-const users = [];
-
 // Registro
-router.post("/register", (req, res) => {
-    const { username, password } = req.body;
+router.post("/register", async (req, res) => {
+    try {
+        const { first_name, last_name, email, age, password } = req.body;
 
-    const hashedPassword = createHash(password);
+        // Validar campos obligatorios
+        if (!first_name || !last_name || !email || !age || !password) {
+        return res.status(400).json({ message: "Todos los campos son obligatorios" });
+        }
 
-    users.push({ username, password: hashedPassword });
-    res.json({ message: "Usuario registrado con éxito" });
-});
+        // Verificar si ya existe el usuario
+        const existingUser = await UserModel.findOne({ email });
+        if (existingUser) {
+        return res.status(400).json({ message: "El usuario ya existe" });
+        }
 
-// Login
-router.post("/login", (req, res) => {
-    const { username, password } = req.body;
+        // Hashear la contraseña
+        const hashedPassword = createHash(password);
 
-    const user = users.find((u) => u.username === username);
-    if (!user) return res.status(400).json({ message: "Usuario no encontrado" });
+        // Crear el usuario en la BD
+        const newUser = await UserModel.create({
+        first_name,
+        last_name,
+        email,
+        age,
+        password: hashedPassword,
+        });
 
-  // Aquí usamos tu función
-    if (!isValidPassword(password, user.password)) {
-        return res.status(400).json({ message: "Contraseña incorrecta" });
+        res.status(201).json({ message: "Usuario registrado con éxito", user: newUser });
+    } catch (error) {
+        console.error("Error en registro:", error);
+        res.status(500).json({ message: "Error en el servidor" });
     }
+    });
 
-    res.json({ message: "Login exitoso" });
+    // Login
+    router.post("/login", async (req, res) => {
+    try {
+        const { email, password } = req.body;
+
+        // Validar campos
+        if (!email || !password) {
+        return res.status(400).json({ message: "Email y contraseña son obligatorios" });
+        }
+
+        // Buscar usuario por email
+        const user = await UserModel.findOne({ email });
+        if (!user) return res.status(400).json({ message: "Usuario no encontrado" });
+
+        // Validar contraseña
+        if (!isValidPassword(password, user.password)) {
+        return res.status(400).json({ message: "Contraseña incorrecta" });
+        }
+
+        res.json({ message: "Login exitoso", user });
+    } catch (error) {
+        console.error(" Error en login:", error);
+        res.status(500).json({ message: "Error en el servidor" });
+    }
 });
 
 export default router;
+
