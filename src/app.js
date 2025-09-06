@@ -10,6 +10,9 @@ import { fileURLToPath } from 'url';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import usersRouter from "./routes/users.routes.js";
+import sessionsRouter from "./routes/sessions.routes.js";  
+import passport from "passport";
+import initializePassport from "./config/passport.config.js"; 
 
 dotenv.config();
 
@@ -42,10 +45,14 @@ app.engine('handlebars', hbs.engine);
 app.set('views', join(__dirname, 'views'));
 app.set('view engine', 'handlebars');
 
+initializePassport();
+app.use(passport.initialize());
+
 app.use('/api/products', productsRouter);
 app.use('/api/carts', cartsRouter);
 app.use('/', viewsRouter(io));
 app.use("/api/users", usersRouter);
+app.use("/api/sessions", sessionsRouter);
 
 io.on('connection', socket => {
     console.log('Cliente conectado:', socket.id);
